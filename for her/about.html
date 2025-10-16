@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Drag Papers❤️</title>
+<link href="https://fonts.googleapis.com/css2?family=Zeyada&display=swap" rel="stylesheet">
+<style>
+  body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-image: url("https://www.psdgraphics.com/wp-content/uploads/2022/01/white-math-paper-texture.jpg");
+    background-position: center center;
+    overflow: hidden;
+  }
+
+  .paper {
+    background-image: url("https://i0.wp.com/textures.world/wp-content/uploads/2018/10/2-Millimeter-Paper-Background-copy.jpg?ssl=1");
+    background-size: 500px;
+    background-position: center center;
+    padding: 20px 100px;
+    transform: rotateZ(-5deg);
+    box-shadow: 1px 15px 20px rgba(0,0,0,0.5);
+    position: absolute;
+    cursor: grab;
+    user-select: none;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .paper:active {
+    cursor: grabbing;
+    box-shadow: 2px 20px 30px rgba(0,0,0,0.6);
+  }
+
+  .paper.heart {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  .paper.image {
+    padding: 10px;
+  }
+
+  .paper.image p {
+    font-size: 30px;
+    margin: 8px 0;
+    font-family: 'Zeyada', cursive;
+    color: rgb(0,0,100);
+    opacity: 0.75;
+  }
+
+  img {
+    max-height: 200px;
+    width: 100%;
+    display: block;
+    margin-top: 8px;
+    user-select: none;
+    border-radius: 8px;
+  }
+
+  .paper.heart::after {
+    content: "";
+    background-image: url('https://cdn.pixabay.com/photo/2016/03/31/19/25/cartoon-1294994__340.png');
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: 150px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+  }
+
+  p {
+    font-family: 'Zeyada', cursive;
+    font-size: 50px;
+    color: rgb(0,0,100);
+    opacity: 0.75;
+    user-select: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="paper heart"></div>
+
+
+<div class="paper image">
+  <p>inhe chumuhh inki pooja kru</p>
+  <img src="img10.jpg" />
+</div>
+
+<div class="paper image">
+  <p>my laxmii  jii</p>
+  <img src="img9.jpg" />
+</div>
+
+<div class="paper image">
+  <p>my babbyyyyy gurlllll</p>
+  <img src="img7.jpg" />
+</div>
+
+<div class="paper image">
+  <p>kisssiii</p>
+  <img src="img4.jpg" />
+</div>
+
+
+<div class="paper image">
+    <p>third date</p>
+  <img src="img6.jpg"/>
+</div>
+  
+
+<div class="paper image">
+    <p>second date</p>
+  <img src="img2.jpg"/>
+</div>
+  
+<div class="paper image">
+    <p>first date</p>
+  <img src="img1.jpg" />
+</div>
+
+<div class="paper image">
+  <p>we are perfect</p>
+  <img src="img3.jpg" />
+</div>
+
+<div class="paper red">
+  <p class="p1">i love youu sooo muchh!</p>
+  <img src="img11.jpg" alt="">
+</div>
+
+<div class="paper">
+  <p class="p1">You'r my everything❤️</p>
+</div>
+
+<div class="paper">
+  <p class="p1">its been a year my love❤️ </p>
+  <p>drag to move !</p>
+</div>
+
+<script>
+/* ---------------- Desktop Mouse Drag ---------------- */
+let highestZ = 1;
+
+class PaperMouse {
+  holdingPaper = false;
+  mouseTouchX = 0;
+  mouseTouchY = 0;
+  mouseX = 0;
+  mouseY = 0;
+  prevMouseX = 0;
+  prevMouseY = 0;
+  velX = 0;
+  velY = 0;
+  rotation = Math.random() * 30 - 15;
+  currentPaperX = 0;
+  currentPaperY = 0;
+  rotating = false;
+
+  init(paper) {
+    document.addEventListener('mousemove', (e) => {
+      if(!this.rotating) {
+        this.mouseX = e.clientX;
+        this.mouseY = e.clientY;
+        this.velX = this.mouseX - this.prevMouseX;
+        this.velY = this.mouseY - this.prevMouseY;
+      }
+
+      const dirX = e.clientX - this.mouseTouchX;
+      const dirY = e.clientY - this.mouseTouchY;
+      const dirLength = Math.sqrt(dirX*dirX + dirY*dirY);
+      const dirNormalizedX = dirX / dirLength;
+      const dirNormalizedY = dirY / dirLength;
+
+      const angle = Math.atan2(dirNormalizedY, dirNormalizedX);
+      let degrees = 180 * angle / Math.PI;
+      degrees = (360 + Math.round(degrees)) % 360;
+      if(this.rotating) { this.rotation = degrees; }
+
+      if(this.holdingPaper) {
+        if(!this.rotating) {
+          this.currentPaperX += this.velX;
+          this.currentPaperY += this.velY;
+        }
+        this.prevMouseX = this.mouseX;
+        this.prevMouseY = this.mouseY;
+
+        paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+      }
+    });
+
+    paper.addEventListener('mousedown', (e) => {
+      if(this.holdingPaper) return;
+      this.holdingPaper = true;
+      paper.style.zIndex = highestZ;
+      highestZ += 1;
+
+      if(e.button === 0){
+        this.mouseTouchX = this.mouseX;
+        this.mouseTouchY = this.mouseY;
+        this.prevMouseX = this.mouseX;
+        this.prevMouseY = this.mouseY;
+      }
+      if(e.button === 2){
+        this.rotating = true;
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      this.holdingPaper = false;
+      this.rotating = false;
+    });
+  }
+}
+
+/* ---------------- Mobile Touch Drag ---------------- */
+class PaperTouch {
+  holdingPaper = false;
+  touchStartX = 0;
+  touchStartY = 0;
+  touchMoveX = 0;
+  touchMoveY = 0;
+  prevTouchX = 0;
+  prevTouchY = 0;
+  velX = 0;
+  velY = 0;
+  rotation = Math.random() * 30 - 15;
+  currentPaperX = 0;
+  currentPaperY = 0;
+  rotating = false;
+
+  init(paper) {
+    paper.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if(!this.rotating){
+        this.touchMoveX = e.touches[0].clientX;
+        this.touchMoveY = e.touches[0].clientY;
+        this.velX = this.touchMoveX - this.prevTouchX;
+        this.velY = this.touchMoveY - this.prevTouchY;
+      }
+
+      const dirX = e.touches[0].clientX - this.touchStartX;
+      const dirY = e.touches[0].clientY - this.touchStartY;
+      const dirLength = Math.sqrt(dirX*dirX + dirY*dirY);
+      const dirNormalizedX = dirX / dirLength;
+      const dirNormalizedY = dirY / dirLength;
+
+      const angle = Math.atan2(dirNormalizedY, dirNormalizedX);
+      let degrees = 180 * angle / Math.PI;
+      degrees = (360 + Math.round(degrees)) % 360;
+      if(this.rotating) { this.rotation = degrees; }
+
+      if(this.holdingPaper){
+        if(!this.rotating){
+          this.currentPaperX += this.velX;
+          this.currentPaperY += this.velY;
+        }
+        this.prevTouchX = this.touchMoveX;
+        this.prevTouchY = this.touchMoveY;
+        paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+      }
+    });
+
+    paper.addEventListener('touchstart', (e) => {
+      if(this.holdingPaper) return;
+      this.holdingPaper = true;
+      paper.style.zIndex = highestZ;
+      highestZ += 1;
+      this.touchStartX = e.touches[0].clientX;
+      this.touchStartY = e.touches[0].clientY;
+      this.prevTouchX = this.touchStartX;
+      this.prevTouchY = this.touchStartY;
+    });
+
+    paper.addEventListener('touchend', () => {
+      this.holdingPaper = false;
+      this.rotating = false;
+    });
+
+    paper.addEventListener('gesturestart', (e) => { e.preventDefault(); this.rotating=true; });
+    paper.addEventListener('gestureend', () => { this.rotating=false; });
+  }
+}
+
+/* ---------------- Initialize all papers ---------------- */
+const papers = Array.from(document.querySelectorAll('.paper'));
+papers.forEach(paper => {
+  const pm = new PaperMouse(); pm.init(paper);
+  const pt = new PaperTouch(); pt.init(paper);
+});
+</script>
+</body>
+</html>
